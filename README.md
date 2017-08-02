@@ -1,3 +1,7 @@
 # React Express Starter
 
-* Notes to come
+** Check the other branches too **
+
+* redux - react/express/redux
+* sql - react/express/sql
+* mongo - react/express/mongo
