@@ -8,7 +8,6 @@ const samplesController = {};
 samplesController.getSamples = function(req,res){
   console.log('allSamples');
   SampleModel.findAll().then(samples => {
-    console.log(samples)
     if (samples.length === 0) {
       const emptyJSON = {
         text: 'Start creating some stuff!'
@@ -44,9 +43,10 @@ samplesController.getSample = function(req,res){
 }
 
 samplesController.createSample = function (req, res) {
+  console.log(req.body);
   SampleModel.create({
-    text: 'sample 2',
-    value: 11
+    text: req.body.text,
+    value: req.body.value
   }).then(sample => {
     res.json(sample)
   }).catch(err => {
@@ -69,8 +69,9 @@ samplesController.deleteSample = function (req, res) {
 }
 
 samplesController.updateSample = function (req, res) {
+  console.log(req.body);
   SampleModel.update({
-    text: 'hello'
+    text: req.body.text
   }, {
     where: {
       id: req.params.id
