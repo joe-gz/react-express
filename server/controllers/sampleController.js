@@ -22,4 +22,66 @@ samplesController.getSamples = function(req,res){
   });
 }
 
+samplesController.getSample = function(req,res){
+  console.log('single sample');
+  SampleModel.find({
+    where: {
+      id: req.params.id
+    }
+  }).then(sample => {
+    console.log(sample)
+    if (!sample) {
+      const emptyJSON = {
+        text: 'Start creating some stuff!'
+      };
+      res.json(emptyJSON)
+    } else {
+      res.json(sample)
+    }
+  }).catch(err => {
+    console.log(err);
+  });
+}
+
+samplesController.createSample = function (req, res) {
+  SampleModel.create({
+    text: 'sample 2',
+    value: 11
+  }).then(sample => {
+    res.json(sample)
+  }).catch(err => {
+    console.log('Could not create!', err);
+  });
+}
+
+samplesController.deleteSample = function (req, res) {
+  SampleModel.destroy({
+    where: {
+      id: req.params.id
+    }
+  }).then(sample => {
+    res.json({
+      text: 'that sample has been destroyed'
+    })
+  }).catch(err => {
+    console.log('Could not delete!', err);
+  });
+}
+
+samplesController.updateSample = function (req, res) {
+  SampleModel.update({
+    text: 'hello'
+  }, {
+    where: {
+      id: req.params.id
+    }
+  }).then(sample => {
+    res.json({
+      text: sample
+    })
+  }).catch(err => {
+    console.log('Could not update!', err);
+  });
+}
+
 module.exports = samplesController;
