@@ -7,6 +7,7 @@ import Home from './Home/Home';
 import About from './About/About';
 import NotFound from './Errors/NotFound';
 import '../styles/App.css';
+import RouteTest from './RouteTest';
 
 class App extends Component {
 
@@ -21,7 +22,8 @@ class App extends Component {
           Click for redux action
         </div>
         <Switch>
-          <Route exact path='/' component={Home}/>
+          <Route exact path='/' component={RouteTest}/>
+          <Route path='/home' component={Home}/>
           <Route path='/about' component={About}/>
           <Route path='*' component={NotFound}/>
         </Switch>
