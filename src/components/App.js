@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import store from '../store';
 import {toggleModal} from '../actions/actions';
 import logo from '../images/logo.svg';
+import { Switch, Route } from 'react-router-dom';
+import Home from './Home/Home';
+import About from './About/About';
+import NotFound from './Errors/NotFound';
 import '../styles/App.css';
 
 class App extends Component {
@@ -16,6 +20,11 @@ class App extends Component {
         <div onClick={this.openModal}>
           Click for redux action
         </div>
+        <Switch>
+          <Route exact path='/' component={Home}/>
+          <Route path='/about' component={About}/>
+          <Route path='*' component={NotFound}/>
+        </Switch>
       </div>
     );
   }
