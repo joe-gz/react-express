@@ -122,19 +122,23 @@ class RouteTest extends Component {
       <div className='RouteTest'>
         Hello from the Route test page
         <div className='input-container'>
-          <label htmlFor='create-input' className='account-info-label'>Create</label>
+          <label htmlFor='create-input'>Create</label>
           <input id='create-input' type='text' value={this.state.inputCreateValue} onChange={this.handleCreateInputChange} />
           <div onClick={this.createSample}>Create</div>
         </div>
         <div className='input-container'>
-          <label htmlFor='update-id-input' className='account-info-label'>Update Id</label>
-          <input id='update-id-input' type='text' value={this.state.inputUpdateIdValue} onChange={this.handleUpdateIdChange} />
-          <label htmlFor='update-input' className='account-info-label'>Update Text</label>
-          <input id='update-input' type='text' value={this.state.inputUpdateValue} onChange={this.handleUpdateInputChange} />
+          <div>
+            <label htmlFor='update-id-input'>Update Id</label>
+            <input id='update-id-input' type='text' value={this.state.inputUpdateIdValue} onChange={this.handleUpdateIdChange} />
+          </div>
+          <div>
+            <label htmlFor='update-input'>Update Text</label>
+            <input id='update-input' type='text' value={this.state.inputUpdateValue} onChange={this.handleUpdateInputChange} />
+          </div>
           <div onClick={this.updateSample}>Update</div>
         </div>
         <div className='input-container'>
-          <label htmlFor='delete-input' className='account-info-label'>Delete</label>
+          <label htmlFor='delete-input'>Delete</label>
           <input id='delete-input' type='text' value={this.state.inputDeleteIdValue} onChange={this.handleDeleteIdChange} />
           <div onClick={this.deleteSample}>Delete</div>
         </div>
