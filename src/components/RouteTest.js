@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {apiPath} from '../config.js';
+// import {apiPath} from '../config.js';
 import axios from 'axios';
 
 class RouteTest extends Component {

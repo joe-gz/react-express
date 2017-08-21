@@ -1,5 +1,5 @@
 const express = require('express');
-const DB = require("../db/connection");
+const DB = require('../db/connection');
 const SampleModel = DB.models.Sample;
 const router = express.Router();
 
@@ -7,6 +7,7 @@ const samplesController = {};
 
 samplesController.getSamples = function(req,res){
   console.log('allSamples');
+  console.log(req.session);
   SampleModel.findAll().then(samples => {
     if (samples.length === 0) {
       const emptyJSON = {

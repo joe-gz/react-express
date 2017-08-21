@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize('postgres:///sequelize_test');
 const Sample = sequelize.import('../models/samples');
-const User = sequelize.import('../models/users');
+const User = sequelize.import('../models/user');
 
 sequelize
   .authenticate()
