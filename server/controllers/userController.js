@@ -20,7 +20,7 @@ usersController.signin = function(req, res){
     // console.log('ERROR', err);
     // console.log('USERRRR', user);
     req.session.user = user;
-    console.log(req.session);
+    console.log('SUCCESS', req.session);
     res.json(user);
   })(req, res);
 }

@@ -12,6 +12,9 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
+  Sample.belongsTo(User);
+  User.hasMany(Sample);
+
 module.exports = {
   Sequelize: Sequelize,
   sequelize: sequelize,
