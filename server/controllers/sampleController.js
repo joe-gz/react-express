@@ -2,12 +2,15 @@ const express = require('express');
 const DB = require('../db/connection');
 const SampleModel = DB.models.Sample;
 const router = express.Router();
+const Authenticate = require('../utils/authentication.utils.js');
 
 const samplesController = {};
 
 samplesController.getSamples = function(req,res){
   console.log('allSamples');
-  console.log(req.session);
+  console.log(req.session.user);
+  const user = {userId: 1};
+  Authenticate.authenticatedUser(req, user)
   SampleModel.findAll().then(samples => {
     if (samples.length === 0) {
       const emptyJSON = {

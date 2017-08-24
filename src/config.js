@@ -1,5 +1,6 @@
 export const initialState = {
-  modalVisible: false
+  modalVisible: false,
+  currentUser: {}
 }
 
 export const apiPath = {

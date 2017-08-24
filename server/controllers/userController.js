@@ -15,10 +15,7 @@ usersController.signup = function(req, res){
 }
 
 usersController.signin = function(req, res){
-  console.log(req.body);
   passport.authenticate('local-login', function (err, user){
-    // console.log('ERROR', err);
-    // console.log('USERRRR', user);
     req.session.user = user;
     console.log('SUCCESS', req.session);
     res.json(user);

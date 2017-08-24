@@ -1,2 +1,3 @@
 export const
-  TOGGLE_MODAL = 'TOGGLE_MODAL';
+  TOGGLE_MODAL = 'TOGGLE_MODAL',
+  SET_USER = 'SET_USER';

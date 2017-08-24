@@ -19,9 +19,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div onClick={this.openModal}>
-          Click for redux action
-        </div>
         <Switch>
           <Route exact path='/' component={Login}/>
           <Route path='/routeTest' component={RouteTest}/>

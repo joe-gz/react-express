@@ -1,9 +1,10 @@
 // @flow
-import {toggleModal} from './reducers';
+import {toggleModal, setCurrentUser} from './reducers';
 import {combineReducers} from 'redux';
 
 const appReducer = combineReducers({
-  modalVisible: toggleModal
+  modalVisible: toggleModal,
+  currentUser: setCurrentUser
 });
 
 export default appReducer;

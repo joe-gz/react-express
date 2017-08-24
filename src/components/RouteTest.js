@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import {apiPath} from '../config.js';
 import axios from 'axios';
+import store from '../store';
 
 class RouteTest extends Component {
 
@@ -10,13 +11,31 @@ class RouteTest extends Component {
       inputCreateValue: '',
       inputUpdateValue: '',
       inputUpdateIdValue: '',
-      inputDeleteIdValue: ''
+      inputDeleteIdValue: '',
+      ...store.getState()
     };
+    console.log(this);
   }
 
+  unsubscribe: () => void;
+
   componentDidMount() {
+    this.unsubscribe = store.subscribe(this.storeDidUpdate);
+    console.log(this.state);
     this.getSamples();
   }
+
+  componentDidUpdate() {
+    console.log(this.state);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  storeDidUpdate:Function = () => {
+    this.setState(store.getState());
+  };
 
   getSamples = () => {
     axios.get('/samples')
