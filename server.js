@@ -6,6 +6,7 @@ const routes = require('./server/config/routes');
 const passport = require('passport');
 const configurePassport = require('./server/config/localPassport');
 const session = require('express-session');
+const port = 3001 || process.env.PORT;
 
 //****After running your build, uncomment this to launch the react fromtend with your node backend
 // app.use(express.static(__dirname+ '/build'));
@@ -24,6 +25,6 @@ configurePassport(passport);
 
 app.use(routes)
 
-app.listen(3001, function () {
-  console.log('Example app listening on port 3001!');
+app.listen(port, function () {
+  console.log('Example app listening on port ' + port + '!');
 });

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import {apiPath} from '../config.js';
 import axios from 'axios';
 import store from '../store';
+import {setCurrentUser} from '../actions/actions';
 
 class RouteTest extends Component {
 
@@ -14,7 +15,6 @@ class RouteTest extends Component {
       inputDeleteIdValue: '',
       ...store.getState()
     };
-    console.log(this);
   }
 
   unsubscribe: () => void;
@@ -22,12 +22,17 @@ class RouteTest extends Component {
   componentDidMount() {
     this.unsubscribe = store.subscribe(this.storeDidUpdate);
     console.log(this.state);
-    this.getSamples();
+    if (!this.state.currentUser.id) {
+      console.log('no user!');
+      this.fetchUserInfo();
+    } else {
+      this.getSamples();
+    }
   }
-
-  componentDidUpdate() {
-    console.log(this.state);
-  }
+  //
+  // componentDidUpdate() {
+  //   console.log(this.state);
+  // }
 
   componentWillUnmount() {
     this.unsubscribe();
@@ -37,9 +42,26 @@ class RouteTest extends Component {
     this.setState(store.getState());
   };
 
+  fetchUserInfo = () => {
+    axios.get('/get-user')
+    .then((response) => {
+      console.log(response);
+      if (response.data !== '') {
+        store.dispatch(setCurrentUser(response));
+      } else {
+        this.props.history.push('/');
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      this.props.history.push('/');
+    });
+  }
+
   getSamples = () => {
-    axios.get('/samples')
-    .then(function (response) {
+    console.log(this.state.currentUser);
+    axios.get('/samples/' + this.state.currentUser.id)
+    .then((response) => {
       console.log(response);
     })
     .catch(function (error) {
@@ -53,25 +75,23 @@ class RouteTest extends Component {
 
   createSample = () => {
     console.log(this.state.inputCreateValue);
-    const request = new XMLHttpRequest();
-    request.onload = (reponse) => {
-      console.log('completed');
-      console.log(reponse);
-      this.setState({inputCreateValue: ''});
-    };
-    request.onerror = err => {
-      console.log(`Error: ${err}`);
-    };
-
-    request.open('POST', '/create', true);
 
     const bigObj = {
       text: this.state.inputCreateValue,
       value: 10
     };
 
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.send(JSON.stringify(bigObj));
+    axios.post(`/create/${this.state.currentUser.id}`, {
+      data: bigObj
+    })
+    .then((response) => {
+      console.log('completed');
+      console.log(response);
+      this.setState({inputCreateValue: ''});
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
   handleUpdateInputChange = (evt) => {
@@ -85,27 +105,25 @@ class RouteTest extends Component {
   updateSample = () => {
     console.log(this.state.inputUpdateValue);
     console.log(this.state.inputUpdateIdValue);
-    const request = new XMLHttpRequest();
-    request.onload = (reponse) => {
-      console.log('completed');
-      console.log(reponse);
-      this.setState({
-        inputUpdateValue: '',
-        inputUpdateIdValue: ''
-      });
-    };
-    request.onerror = err => {
-      console.log(`Error: ${err}`);
-    };
-
-    request.open('PUT', `/update/${this.state.inputUpdateIdValue}`, true);
 
     const bigObj = {
       text: this.state.inputUpdateValue
     };
 
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.send(JSON.stringify(bigObj));
+    axios.put(`/update/${this.state.inputUpdateIdValue}/${this.state.currentUser.id}`, {
+      data: bigObj
+    })
+    .then((response) => {
+      console.log('completed');
+      console.log(response);
+      this.setState({
+        inputUpdateValue: '',
+        inputUpdateIdValue: ''
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
   handleDeleteIdChange = (evt) => {
@@ -114,26 +132,17 @@ class RouteTest extends Component {
 
   deleteSample = () => {
     console.log(this.state.inputDeleteIdValue);
-    const request = new XMLHttpRequest();
-    request.onload = (reponse) => {
+    axios.delete(`/delete/${this.state.inputDeleteIdValue}/${this.state.currentUser.id}`)
+    .then((response) => {
       console.log('completed');
-      console.log(reponse);
+      console.log(response);
       this.setState({
         inputDeleteIdValue: ''
       });
-    };
-    request.onerror = err => {
-      console.log(`Error: ${err}`);
-    };
-
-    request.open('DELETE', `/delete/${this.state.inputDeleteIdValue}`, true);
-
-    const bigObj = {
-      text: this.state.inputUpdateValue
-    };
-
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.send(JSON.stringify(bigObj));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
   render() {

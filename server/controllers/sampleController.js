@@ -6,87 +6,127 @@ const Authenticate = require('../utils/authentication.utils.js');
 
 const samplesController = {};
 
-samplesController.getSamples = function(req,res){
-  console.log('allSamples');
-  console.log(req.session.user);
-  const user = {userId: 1};
-  Authenticate.authenticatedUser(req, user)
-  SampleModel.findAll().then(samples => {
-    if (samples.length === 0) {
-      const emptyJSON = {
-        text: 'Start creating some stuff!'
-      };
-      res.json(emptyJSON)
-    } else {
-      res.json(samples)
-    }
-  }).catch(err => {
-    console.log(err);
-  });
+samplesController.getSamples = function(req, res){
+  console.log('PARAMSSS', req.params);
+  console.log('all smaples for ' + req.params);
+  console.log('SAMPLE USER', req.session.user);
+  const userId = req.params.userId;
+  const authenticated = Authenticate.authenticatedUser(req, userId)
+  if (authenticated) {
+    SampleModel.findAll({
+      where: {
+        userId: userId
+      }
+    }).then(samples => {
+      if (samples.length === 0) {
+        const emptyJSON = {
+          text: 'Start creating some stuff!'
+        };
+        res.json(emptyJSON)
+      } else {
+        res.json(samples)
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  } else {
+    res.json({error: 'Not logged in!'});
+  }
 }
 
-samplesController.getSample = function(req,res){
+samplesController.getSample = function(req, res){
   console.log('single sample');
-  SampleModel.find({
-    where: {
-      id: req.params.id
-    }
-  }).then(sample => {
-    console.log(sample)
-    if (!sample) {
-      const emptyJSON = {
-        text: 'Start creating some stuff!'
-      };
-      res.json(emptyJSON)
-    } else {
-      res.json(sample)
-    }
-  }).catch(err => {
-    console.log(err);
-  });
+  const userId = req.params.userId;
+  const authenticated = Authenticate.authenticatedUser(req, userId)
+  if (authenticated) {
+    SampleModel.find({
+      where: {
+        id: req.params.id,
+        userId: userId
+      }
+    }).then(sample => {
+      console.log(sample)
+      if (!sample) {
+        const emptyJSON = {
+          text: 'Start creating some stuff!'
+        };
+        res.json(emptyJSON)
+      } else {
+        res.json(sample)
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  } else {
+    res.json({error: 'Not logged in!'});
+  }
 }
 
 samplesController.createSample = function (req, res) {
   console.log(req.body);
-  SampleModel.create({
-    text: req.body.text,
-    value: req.body.value
-  }).then(sample => {
-    res.json(sample)
-  }).catch(err => {
-    console.log('Could not create!', err);
-  });
+  console.log(req.session);
+  const userId = req.params.userId;
+  const authenticated = Authenticate.authenticatedUser(req, userId)
+  if (authenticated) {
+    SampleModel.create({
+      text: req.body.data.text,
+      value: req.body.data.value,
+      userId: req.session.user.id
+    }).then(sample => {
+      res.json(sample)
+    }).catch(err => {
+      console.log('Could not create!', err);
+    });
+  } else {
+    res.json({error: 'Not logged in!'});
+  }
 }
 
 samplesController.deleteSample = function (req, res) {
-  SampleModel.destroy({
-    where: {
-      id: req.params.id
-    }
-  }).then(sample => {
-    res.json({
-      text: 'that sample has been destroyed'
-    })
-  }).catch(err => {
-    console.log('Could not delete!', err);
-  });
+  const userId = req.params.userId;
+  const authenticated = Authenticate.authenticatedUser(req, userId)
+  if (authenticated) {
+    SampleModel.destroy({
+      where: {
+        id: req.params.id,
+        userId: userId
+      }
+    }).then(sample => {
+      res.json({
+        text: 'that sample has been destroyed'
+      })
+    }).catch(err => {
+      console.log('Could not delete!', err);
+    });
+  } else {
+    res.json({error: 'Not logged in!'});
+  }
 }
 
 samplesController.updateSample = function (req, res) {
-  console.log(req.body);
-  SampleModel.update({
-    text: req.body.text
-  }, {
-    where: {
-      id: req.params.id
-    }
-  }).then(sample => {
-    res.json({
-      text: sample
-    })
-  }).catch(err => {
-    console.log('Could not update!', err);
-  });
+  console.log('REQ BODY 85', req.body);
+  console.log('REQ BODY TEXT 86', req.body.data.text);
+  const userId = req.params.userId;
+  const authenticated = Authenticate.authenticatedUser(req, userId)
+  if (authenticated) {
+    SampleModel.update({
+      text: req.body.data.text
+    }, {
+      where: {
+        id: req.params.id,
+        userId: userId
+      }
+    }).then(sample => {
+      console.log('RESPONSE 94', sample);
+      res.json({
+        text: sample
+      })
+    }).catch(err => {
+      console.log('Could not update!', err);
+    });
+  } else {
+    res.json({error: 'Not logged in!'});
+  }
 }
 
 module.exports = samplesController;

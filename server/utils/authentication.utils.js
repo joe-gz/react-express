@@ -1,7 +1,8 @@
-const authenticatedUser = (req, user) => {
+const authenticatedUser = (req, userId) => {
   let authenticated = false
-  console.log(req.session.user);
-  if (req.session.user.userId !== user.userId) {
+  console.log('USERRRR', req.session.user);
+  console.log('PASSED IN USERRR', userId);
+  if (req.session.user.id !== userId) {
     authenticated = true;
   }
   console.log(authenticated);
@@ -11,7 +12,7 @@ const authenticatedUser = (req, user) => {
 const isSignedInUser = (req) => {
   let authenticated = false
   console.log(req.session.user);
-  if (req.session.user.userId) {
+  if (req.session.user.id) {
     authenticated = true;
   }
   console.log(authenticated);
@@ -19,6 +20,6 @@ const isSignedInUser = (req) => {
 };
 
 module.exports = {
-  isAuthenticated: isAuthenticated,
+  authenticatedUser: authenticatedUser,
   isSignedInUser: isSignedInUser
 };
