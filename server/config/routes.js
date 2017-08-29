@@ -10,9 +10,9 @@ router.get('/sample/:id', sampleController.getSample);
 router.post('/create/:userId', sampleController.createSample);
 router.delete('/delete/:id/:userId', sampleController.deleteSample);
 router.put('/update/:id/:userId', sampleController.updateSample);
+router.get('/get-user', sampleController.getUserInfo);
 
 // users:
-router.get('/get-user', userController.getUserInfo);
 router.post('/signup', userController.signup);
 router.post('/signin', userController.signin);
 router.post('/signout', userController.signout);

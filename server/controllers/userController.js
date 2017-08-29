@@ -21,12 +21,12 @@ usersController.signin = function(req, res){
     res.json(user);
   })(req, res);
 }
-
-usersController.getUserInfo = function(req, res){
-  console.log(req.body);
-  console.log(req.session.user);
-  res.json(req.session.user);
-}
+// 
+// usersController.getUserInfo = function(req, res){
+//   console.log(req.body);
+//   console.log(req.session.user);
+//   res.json(req.session.user);
+// }
 
 usersController.signout = function(req, res){
   console.log(req.body);

@@ -129,4 +129,22 @@ samplesController.updateSample = function (req, res) {
   }
 }
 
+samplesController.getUserInfo = function (req, res) {
+  if (req.session.user) {
+    SampleModel.findAll({
+      where: {
+        userId: req.session.user.id
+      }
+    }).then(samples => {
+      const jsonResponse = {
+        user: req.session.user,
+        samples: samples
+      }
+      res.json(jsonResponse);
+    }).catch(err => {
+      res.json(err)
+    });
+  }
+}
+
 module.exports = samplesController;

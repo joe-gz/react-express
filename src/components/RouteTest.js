@@ -13,6 +13,7 @@ class RouteTest extends Component {
       inputUpdateValue: '',
       inputUpdateIdValue: '',
       inputDeleteIdValue: '',
+      userSamples: [],
       ...store.getState()
     };
   }
@@ -46,8 +47,9 @@ class RouteTest extends Component {
     axios.get('/get-user')
     .then((response) => {
       console.log(response);
-      if (response.data !== '') {
-        store.dispatch(setCurrentUser(response));
+      if (response.data && response.data !== '') {
+        store.dispatch(setCurrentUser(response.data.user));
+        this.setState({userSamples: response.data.samples});
       } else {
         this.props.history.push('/');
       }
@@ -63,6 +65,7 @@ class RouteTest extends Component {
     axios.get('/samples/' + this.state.currentUser.id)
     .then((response) => {
       console.log(response);
+      this.setState({userSamples: response});
     })
     .catch(function (error) {
       console.log(error);
@@ -87,7 +90,12 @@ class RouteTest extends Component {
     .then((response) => {
       console.log('completed');
       console.log(response);
-      this.setState({inputCreateValue: ''});
+      const userSamples = this.state.userSamples.slice();
+      userSamples.push(response.data);
+      this.setState({
+        inputCreateValue: '',
+        userSamples: userSamples
+      });
     })
     .catch((error) => {
       console.log(error);
@@ -145,7 +153,38 @@ class RouteTest extends Component {
     });
   }
 
+  setupUser = () => {
+    let user;
+    if (this.state.currentUser.id) {
+      user = (
+        <div>
+          <div>{this.state.currentUser.id}</div>
+          <div>{this.state.currentUser.username}</div>
+        </div>
+      )
+    } else {
+      user = (
+        <div>
+          Guess you gotta login!
+        </div>
+      )
+    }
+    return user;
+  }
+  setupUserSamples = (sample) => {
+    return (
+      <div key={sample.id}>
+        <div>{sample.text}</div>
+        <div>{sample.value}</div>
+      </div>
+    )
+  }
+
   render() {
+
+    const userInfo = this.setupUser();
+    const userSamples = this.state.userSamples.map(this.setupUserSamples);
+
     return (
       <div className='RouteTest'>
         Hello from the Route test page
@@ -169,6 +208,12 @@ class RouteTest extends Component {
           <label htmlFor='delete-input'>Delete</label>
           <input id='delete-input' type='text' value={this.state.inputDeleteIdValue} onChange={this.handleDeleteIdChange} />
           <div onClick={this.deleteSample}>Delete</div>
+        </div>
+        <div>
+          {userInfo}
+        </div>
+        <div>
+          {userSamples}
         </div>
       </div>
     );
