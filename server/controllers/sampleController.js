@@ -144,6 +144,8 @@ samplesController.getUserInfo = function (req, res) {
     }).catch(err => {
       res.json(err)
     });
+  } else {
+    res.json(false);
   }
 }
 

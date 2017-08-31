@@ -44,9 +44,9 @@ class RouteTest extends Component {
   };
 
   fetchUserInfo = () => {
+    console.log('fetch user?');
     axios.get('/get-user')
     .then((response) => {
-      console.log(response);
       if (response.data && response.data !== '') {
         store.dispatch(setCurrentUser(response.data.user));
         this.setState({userSamples: response.data.samples});
@@ -65,7 +65,7 @@ class RouteTest extends Component {
     axios.get('/samples/' + this.state.currentUser.id)
     .then((response) => {
       console.log(response);
-      this.setState({userSamples: response});
+      this.setState({userSamples: response.data});
     })
     .catch(function (error) {
       console.log(error);
@@ -153,6 +153,18 @@ class RouteTest extends Component {
     });
   }
 
+  logout = () => {
+    axios.get('/signout')
+    .then(response => {
+      console.log(response);
+      this.props.history.push('/');
+    })
+    .catch(err => {
+      console.log('could not log out!');
+      console.log(err);
+    });
+  }
+
   setupUser = () => {
     let user;
     if (this.state.currentUser.id) {
@@ -188,6 +200,7 @@ class RouteTest extends Component {
     return (
       <div className='RouteTest'>
         Hello from the Route test page
+        <div onClick={this.logout}>Logout</div>
         <div className='input-container'>
           <label htmlFor='create-input'>Create</label>
           <input id='create-input' type='text' value={this.state.inputCreateValue} onChange={this.handleCreateInputChange} />

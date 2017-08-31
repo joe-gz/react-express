@@ -21,7 +21,7 @@ usersController.signin = function(req, res){
     res.json(user);
   })(req, res);
 }
-// 
+//
 // usersController.getUserInfo = function(req, res){
 //   console.log(req.body);
 //   console.log(req.session.user);
@@ -29,7 +29,12 @@ usersController.signin = function(req, res){
 // }
 
 usersController.signout = function(req, res){
-  console.log(req.body);
+  console.log('LOG OUT', req.session.user);
+  req.logout();
+  if (req.session && req.session.user) {
+    req.session.user = null;
+  }
+  res.redirect('Logged out');
 }
 
 module.exports = usersController;
